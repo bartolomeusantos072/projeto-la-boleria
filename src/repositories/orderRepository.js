@@ -1,17 +1,23 @@
 import database from "../config/database.js"
 
-async function checkClients(nameClients) {
-    return database.query(`SELECT * FROM clients WHERE name = $1`, [nameClients])
-  }
-  
-async function insertClients(client ){
-  const {name, address, phone }=client;
-  return database.query('INSERT INTO clients (name, address, phone) VALUES ($1, $2, $3)', [name, address, phone]);
+
+
+
+
+
+async function checkOrder(order) {
+    return database.query(`SELECT * FROM orders WHERE id = $1`, [order])
+
+}
+
+async function insertOrder(order) {
+    const {clientId, cakeId, quantity, totalPrice} = order;
+    return database.query('INSERT INTO orders ("clientId", "cakeId", quantity, "totalPrice") VALUES ($1, $2, $3,$4)', [clientId, cakeId, quantity, totalPrice]);
 }
 
 const cakeRepository = {
-    checkClients,
-    insertClients
+    checkOrder,
+    insertOrder
 };
 
 export default cakeRepository;

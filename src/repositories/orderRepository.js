@@ -30,8 +30,12 @@ async function getOrderByQuery(date) {
     JOIN cakes ON cakes.id=orders."cakeId"
     WHERE DATE(orders."createdAt")=$1`, [date])
 }
+
 async function getOrderById(id) {
-    return database.query(`select clients.*, cakes.*, orders.id, orders."createdAt", orders.quantity, orders."totalPrice" 
+    return database.query(`SELECT
+    clients.id AS "clientId", clients.name AS "nameClient", clients.address, clients.phone,
+    cakes.id AS "cakeId", cakes.name AS "nameCake", cakes.price, cakes.description, cakes.image, 
+    orders.id AS "orderId", orders."createdAt", orders.quantity, orders."totalPrice" 
     from orders
     JOIN clients ON clients.id=orders."clientId"
     JOIN cakes ON cakes.id=orders."cakeId"
@@ -39,7 +43,7 @@ async function getOrderById(id) {
 }
 
 async function checkOrderForClient(id) {
-    return database.query(`select clients.*, cakes.*, orders.id, orders."createdAt", orders.quantity, orders."totalPrice" 
+    return database.query(`SELECT orders.id AS orderId, orders.quantity, orders."createdAt",  orders."totalPrice", cakes.name AS cakeName 
      from orders
      JOIN clients ON clients.id=orders."clientId" AND orders."clientId"=$1
      JOIN cakes ON cakes.id=orders."cakeId"`, [id])

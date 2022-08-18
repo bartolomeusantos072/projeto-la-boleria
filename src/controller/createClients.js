@@ -14,19 +14,20 @@ export async function createClients(req, res) {
 }
 
 export async function getClientsIdOrders(req, res) {
-    const {id} = req.body;
+    const {id} = req.params;
+    
     try{
         const verifyClient = await clientsRepository.checkClientId(id);
         if (verifyClient.rowCount < 1) {
-          msg.push("client not exist");
+          return res.status(404).send("client not exist");
         }
 
-        const verifyOrder = await orderRepository.checkOrder(orderId)
-        if (verifyOrder.rowCount < 1) {
-            msg.push("client not exist");
-        }
-
-        const verifyAllOrderForClient = await orderRepository.checkOrderForClient()
+        const result = await orderRepository.checkOrderForClient(id);
+        if (result.rowCount < 1) {
+            return res.status(404).send("order not exist");
+          }
+  
+          res.status(200).send(result.rows);
 
     }catch (error){
         console.log(error.mesage);

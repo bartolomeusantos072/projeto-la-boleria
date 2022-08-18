@@ -12,7 +12,7 @@ const orderRouter = Router();
 
 orderRouter.post('/order', validateSchema(orderSchema),  orderValidate,  createOrder);
 orderRouter.get('/orders?', dateValidate, getOrders)
-orderRouter.get('/orders/:id', dateValidate, getOrdersId)
+orderRouter.get('/orders/:id', getOrdersId)
 
 
 export default orderRouter;
